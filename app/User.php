@@ -35,4 +35,7 @@ class User extends Model
 
             return 'error';
     }
+    public static function logout(Request $request) {
+      //@TODO Remove token and token_expiration from connected user
+    }
 }
