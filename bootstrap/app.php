@@ -23,9 +23,9 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-// $app->withFacades();
+$app->withFacades();
 
-// $app->withEloquent();
+ $app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +65,8 @@ $app->singleton(
 
 $app->routeMiddleware([
      'auth' => App\Http\Middleware\AuthMiddleware::class,
+     'token' => App\Http\Middleware\TokenMiddleware::class,
+
  ]);
 
 /*

@@ -2,31 +2,37 @@
 
 namespace App;
 
-use Illuminate\Auth\Authenticatable;
-use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+
+
+class User extends Model
 {
-    use Authenticatable, Authorizable;
+    public static function login(Request $request)
+    {
+        // Check username
+        $user = self::where([
+            ['username', '=', $request->input('username')],
+            ])->firstOrFail();
+            // Check password
+            if(Hash::check($request->input('password'), $user->password)) {
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email',
-    ];
+                // Create random token for the connected user
+                $user->token = str_random(30);
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-    ];
+                // Generate expiration date for token
+                $user->token_expiration = Carbon::now()->addHour();
+                $user->save();
+
+                // Return token for future use
+                return response()->json(['status' => 'success', 'content' => [
+                    'token' => $user->token,
+                ]]);;
+            }
+
+            return 'error';
+    }
 }

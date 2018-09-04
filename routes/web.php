@@ -18,6 +18,6 @@ $router->post('login', 'UserController@login');
 
 // All the route inside here have the prerequisite of being connected, and need
 // a valid token send along
-$router->group(['middleware' => ['auth']], function () use ($router) {
+$router->group(['middleware' => ['token', 'auth']], function () use ($router) {
     $router->get('islogged', 'UserController@isLogged');
 });

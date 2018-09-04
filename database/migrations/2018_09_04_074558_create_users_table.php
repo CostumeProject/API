@@ -18,6 +18,8 @@ class CreateUsersTable extends Migration
             $table->char('username', 100)->unique();
             $table->text('password');
             $table->text('adress');
+            $table->text('token');
+            $table->dateTime('token_expiration');
             $table->integer('role_id')->default(1);
             $table->boolean('status')->default(true);
             $table->timestamps();
